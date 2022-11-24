@@ -1,7 +1,11 @@
 package jm.task.core.jdbc.util;
 
-import java.sql.*;
+import com.mysql.cj.MysqlConnection;
 
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Util {
 
@@ -13,7 +17,10 @@ public class Util {
 
     public Connection getConnection() throws SQLException {
         if (connection == null || connection.isClosed()) {
+            Driver driver = new com.mysql.cj.jdbc.Driver();
+            DriverManager.registerDriver(driver);
             connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            connection.setAutoCommit(false);
         }
         return connection;
     }

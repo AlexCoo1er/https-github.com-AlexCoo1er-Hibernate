@@ -30,7 +30,7 @@ public class UserDaoJDBCImpl implements UserDao {
             PreparedStatement preparedStatement = connection.prepareStatement(sql); // подготовка запроса на отправку
             preparedStatement.execute(); //исполнение запроса отрпавка его в базу
         } catch (SQLException e) {
-            throw new RuntimeException("Подключение к базе данных не удалось \n" + e);
+            e.printStackTrace();
         }
     }
 
@@ -41,7 +41,7 @@ public class UserDaoJDBCImpl implements UserDao {
             PreparedStatement preparedStatement = connection.prepareStatement(sql); // подготовка запроса на отправку
             preparedStatement.execute(); //исполнение запроса отрпавка его в базу
         } catch (SQLException e) {
-            throw new RuntimeException("Подключение к базе данных не удалось \n" + e);
+            e.printStackTrace();
         }
     }
 
@@ -54,9 +54,10 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setString(2, lastName);
             preparedStatement.setInt(3, age); // подстановка вместо вопросов
             preparedStatement.execute(); //исполнение запроса отрпавка его в базу
-            System.out.println("User с именем "+ name + " добавлен в базу данных");
+            connection.commit();
+            System.out.println("User с именем " + name + " добавлен в базу данных");
         } catch (SQLException e) {
-            throw new RuntimeException("Подключение к базе данных не удалось \n" + e);
+            e.printStackTrace();
         }
 
     }
@@ -69,7 +70,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setLong(1, id); // подстановка вместо вопросов
             preparedStatement.execute(); //исполнение запроса отрпавка его в базу
         } catch (SQLException e) {
-            throw new RuntimeException("Подключение к базе данных не удалось \n" + e);
+            e.printStackTrace();
         }
     }
 
@@ -86,7 +87,7 @@ public class UserDaoJDBCImpl implements UserDao {
                         resultSet.getByte("age")));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Подключение к базе данных не удалось \n" + e);
+            e.printStackTrace();
         }
         return list;
     }
@@ -98,7 +99,7 @@ public class UserDaoJDBCImpl implements UserDao {
             PreparedStatement preparedStatement = connection.prepareStatement(sql); // подготовка запроса на отправку
             preparedStatement.execute(); //исполнение запроса отрпавка его в базу
         } catch (SQLException e) {
-            throw new RuntimeException("Подключение к базе данных не удалось \n" + e);
+            e.printStackTrace();
         }
     }
 }
