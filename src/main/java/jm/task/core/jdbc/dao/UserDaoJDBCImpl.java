@@ -11,20 +11,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private Util util;
+    private final Util util = new Util();
 
     public UserDaoJDBCImpl() {
-        util = new Util();
+
     }
 
     public void createUsersTable() {
         try {
-            String sql = "CREATE TABLE IF NOT EXISTS `myfirstschema`.`Users` (\n" +
-                    "  `id` INT NOT NULL AUTO_INCREMENT,\n" +
-                    "  `name` VARCHAR(45) NOT NULL,\n" +
-                    "  `lastname` VARCHAR(45) NOT NULL,\n" +
-                    "  `age` INT(3) NOT NULL,\n" +
-                    "  PRIMARY KEY (`id`));";
+            String sql = """
+                    CREATE TABLE IF NOT EXISTS `myfirstschema`.`Users` (
+                      `id` INT NOT NULL AUTO_INCREMENT,
+                      `name` VARCHAR(45) NOT NULL,
+                      `lastname` VARCHAR(45) NOT NULL,
+                      `age` INT(3) NOT NULL,
+                      PRIMARY KEY (`id`));""";
             Connection connection = util.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql); // подготовка запроса на отправку
             preparedStatement.execute(); //исполнение запроса отрпавка его в базу
@@ -53,6 +54,7 @@ public class UserDaoJDBCImpl implements UserDao {
             preparedStatement.setString(2, lastName);
             preparedStatement.setInt(3, age); // подстановка вместо вопросов
             preparedStatement.execute(); //исполнение запроса отрпавка его в базу
+            System.out.println("User с именем "+ name + " добавлен в базу данных");
         } catch (SQLException e) {
             throw new RuntimeException("Подключение к базе данных не удалось \n" + e);
         }
