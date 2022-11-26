@@ -18,68 +18,100 @@ public class UserDaoJDBCImpl implements UserDao {
     }
 
     public void createUsersTable() {
-        try {
-            String sql = """
-                    CREATE TABLE IF NOT EXISTS `myfirstschema`.`Users` (
-                      `id` INT NOT NULL AUTO_INCREMENT,
-                      `name` VARCHAR(45) NOT NULL,
-                      `lastname` VARCHAR(45) NOT NULL,
-                      `age` INT(3) NOT NULL,
-                      PRIMARY KEY (`id`));""";
-            Connection connection = util.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql); // подготовка запроса на отправку
-            preparedStatement.execute(); //исполнение запроса отрпавка его в базу
+        String sql = """
+                CREATE TABLE IF NOT EXISTS `myfirstschema`.`Users` (
+                  `id` INT NOT NULL AUTO_INCREMENT,
+                  `name` VARCHAR(45) NOT NULL,
+                  `lastname` VARCHAR(45) NOT NULL,
+                  `age` INT(3) NOT NULL,
+                  PRIMARY KEY (`id`));""";
+        PreparedStatement preparedStatement = null;
+        try (Connection connection = util.getConnection()) {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void dropUsersTable() {
-        try {
-            String sql = "drop table if exists Users"; // добавление юзера
-            Connection connection = util.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql); // подготовка запроса на отправку
-            preparedStatement.execute(); //исполнение запроса отрпавка его в базу
+        PreparedStatement preparedStatement = null;
+        String sql = "drop table if exists Users;";
+        try (Connection connection = util.getConnection()) {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void saveUser(String name, String lastName, byte age) {
-        try {
-            String sql = "insert into Users (name, lastname, age) values (?,?,?)"; // добавление юзера
-            Connection connection = util.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql); // подготовка запроса на отправку
+        String sql = "insert into Users (name, lastname, age) values (?,?,?);";
+        PreparedStatement preparedStatement = null;
+        try (Connection connection = util.getConnection()) {
+            preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
-            preparedStatement.setInt(3, age); // подстановка вместо вопросов
-            preparedStatement.execute(); //исполнение запроса отрпавка его в базу
+            preparedStatement.setInt(3, age);
+            preparedStatement.executeUpdate();
             connection.commit();
-            System.out.println("User с именем " + name + " добавлен в базу данных");
+            System.out.println("User с именем - " + name + " добавлен в базу данных");
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
     public void removeUserById(long id) {
-        try {
-            String sql = "delete from Users where id = ?"; // добавление юзера
-            Connection connection = util.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql); // подготовка запроса на отправку
-            preparedStatement.setLong(1, id); // подстановка вместо вопросов
-            preparedStatement.execute(); //исполнение запроса отрпавка его в базу
+        PreparedStatement preparedStatement = null;
+        String sql = "delete from Users where id = ?;";
+        try (Connection connection = util.getConnection()) {
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public List<User> getAllUsers() {
         List<User> list = new ArrayList<>();
-        try {
-            String sql = "select * from Users"; // добавление юзера
-            Connection connection = util.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql); // подготовка запроса на отправку
+        String sql = "select * from Users;"; // добавление юзера
+        PreparedStatement preparedStatement = null;
+        try (Connection connection = util.getConnection()) {
+            preparedStatement = connection.prepareStatement(sql); // подготовка запроса на отправку
             ResultSet resultSet = preparedStatement.executeQuery();//исполнение запроса отрпавка его в базу
             while (resultSet.next()) {
                 list.add(new User(resultSet.getString("name"),
@@ -88,18 +120,36 @@ public class UserDaoJDBCImpl implements UserDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return list;
     }
 
     public void cleanUsersTable() {
-        try {
-            String sql = "delete from Users"; // добавление юзера
-            Connection connection = util.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql); // подготовка запроса на отправку
-            preparedStatement.execute(); //исполнение запроса отрпавка его в базу
+        String sql = "truncate table Users;";
+        PreparedStatement preparedStatement = null;
+        try (Connection connection = util.getConnection()) {
+            preparedStatement = connection.prepareStatement(sql); // подготовка запроса на отправку
+            preparedStatement.executeUpdate(); //исполнение запроса отрпавка его в базу
+            connection.commit();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
+
