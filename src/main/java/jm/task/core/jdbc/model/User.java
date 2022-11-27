@@ -1,22 +1,29 @@
 package jm.task.core.jdbc.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.util.Objects;
 
-@Table
+@Entity //класс будет отображен в базе данных
+@Table (name = "Users") // к какой именно таблице привязывается класс
 public class User {
-    @Id
+    @Id // говорит о том что столбец связанный с полем явл. primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY)//признание стартегии увеличения автоинкрементирования на
+    // стороне базы данных
+    @Column (name = "id")
     private Long id;
 
-    @Column
+    @Column (name = "name") //какой именно столбец из таблицы привязан к полю класса
     private String name;
 
-    @Column
+    @Column (name = "lastname")
     private String lastName;
 
-    @Column
+    @Column (name = "age")
     private Byte age;
 
     public User() {
@@ -63,7 +70,11 @@ public class User {
 
     @Override
     public String toString() {
-        return this.name + this.lastName + this.age;
+        return "User {" +
+                "name= " + this.name + '\'' +
+                "surname" + this.lastName + '\'' +
+                "age =" + this.age +
+                '}';
     }
 
     @Override
