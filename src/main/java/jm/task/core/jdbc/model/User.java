@@ -20,7 +20,7 @@ public class User {
     @Column (name = "name") //какой именно столбец из таблицы привязан к полю класса
     private String name;
 
-    @Column (name = "lastname")
+    @Column (name = "lastName")
     private String lastName;
 
     @Column (name = "age")

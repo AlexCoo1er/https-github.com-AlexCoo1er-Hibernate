@@ -20,7 +20,7 @@ public class Util {
     private static final String PASSWORD = "root";
 
     private final Connection connection = null;
-    private SessionFactory sessionFactory = null; //фабрика по производству сессий
+    private SessionFactory sessionFactory; //фабрика по производству сессий
 
     public SessionFactory getSessionFactory() {
         if (sessionFactory == null || sessionFactory.isClosed()) {
@@ -34,7 +34,7 @@ public class Util {
                 settings.put(Environment.PASS, PASSWORD);
                 settings.put(Environment.DIALECT, "org.hibernate.dialect.MySQL5Dialect");
 
-                settings.put(Environment.SHOW_SQL, "true");
+                settings.put(Environment.SHOW_SQL, "false");
 
                 settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
 
